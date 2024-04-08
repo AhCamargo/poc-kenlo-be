@@ -4,7 +4,7 @@ Nesse Projeto estamos utilizando:
 
 > o NodeJS, Na versão do **NodeJS: 20.11.0**,
 > o Banco de Dados é **MongoDB**,
-> Typescript
+> Typescript e
 > ZOD
 
 # Pacotes utilizados
@@ -21,10 +21,12 @@ Nesse Projeto estamos utilizando:
 
 Agora vamos criar a imagem do banco de dados local com o Docker:
 
-> > docker run --name kenlo-mongodb -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=alc123 -d mongo:4
+> insira seu USERNAME e PASSWORD desejado, antes de rodar o comando abaixo.
 
-Depois é só rodar o npm run dev, caso dê certo terá que aparecer essa mensagem no terminal: **"Server is running on port: 3000"**
+> > docker run --name kenlo-mongodb -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=digitesuasenha -d mongo:4
 
 # Crie seu arquivo .env
 
 > **Atenção:** Não esqueça de criar/preencher seu arquivo _.env_ e copia o modelo de variaveis de ambiente que temos no _.example.env_
+
+Depois é só rodar o npm run dev, caso dê certo terá que aparecer essa mensagem no terminal: **"Server is running on port: 3000"**
