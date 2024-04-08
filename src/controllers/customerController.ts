@@ -21,6 +21,13 @@ export const createCustomer = async (req: Request, res: Response) => {
 
     const { name, email, phone } = validationResult.data;
 
+    const existingCustomer = await Customer.findOne({ email });
+    if (existingCustomer) {
+      return res.status(400).json({
+        message: "E-mail já existe na base de dados",
+      });
+    }
+
     const customer = new Customer({ name, email, phone });
 
     await customer.save();

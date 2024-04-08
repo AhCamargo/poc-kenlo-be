@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { createCustomer } from "../../controllers/customerController";
 import Customer from "../../models/customerModel";
-import { z } from "zod";
 
 jest.mock("../../models/customerModel");
 
@@ -71,6 +70,24 @@ describe("Customer Controller", () => {
       expect(mockResponse.json).toHaveBeenCalledWith({
         message: "Dados de entrada inválidos",
         errors: [responseErrorEmail, responseErrorPhone],
+      });
+    });
+
+    it("should return 400 if email already exists in the database", async () => {
+      const existingCustomer = {
+        _id: "existing_id",
+        name: "Existing Customer",
+        email: mockRequest.body.email,
+        phone: "1234567890",
+      };
+      const mockFindOne = jest.fn().mockResolvedValueOnce(existingCustomer);
+      (Customer as jest.Mocked<any>).findOne = mockFindOne;
+
+      await createCustomer(mockRequest, mockResponse);
+
+      expect(mockResponse.status).toHaveBeenCalledWith(400);
+      expect(mockResponse.json).toHaveBeenCalledWith({
+        message: "E-mail já existe na base de dados",
       });
     });
 

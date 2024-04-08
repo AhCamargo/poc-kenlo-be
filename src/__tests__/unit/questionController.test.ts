@@ -2,20 +2,9 @@ import { Request, Response } from "express";
 import { interactWithChatGPT } from "../../controllers/questionController";
 import Customer from "../../models/customerModel";
 import { generateResponse } from "../../services/chatgpt";
-import { z } from "zod";
 
 jest.mock("../../models/customerModel");
 jest.mock("../../services/chatgpt");
-
-// jest.mock("zod", () => {
-//   const original = jest.requireActual("zod");
-//   return {
-//     ...original,
-//     object: jest.fn(() => ({
-//       safeParse: jest.fn(),
-//     })),
-//   };
-// });
 
 describe("Chat Controller", () => {
   let mockRequest: Partial<Request>;
@@ -76,9 +65,9 @@ describe("Chat Controller", () => {
       });
     });
 
-    it("should return 400 if input is invalid", async () => {
+    it("should return 404 if input is invalid", async () => {
       mockRequest.body = {
-        email: "john@example.com",
+        email: "johnexample.com",
         question: "How are you?",
       };
 
@@ -91,11 +80,6 @@ describe("Chat Controller", () => {
         },
       ];
 
-      jest.spyOn(global, "validateInput").mockReturnValueOnce({
-        success: false,
-        error: { errors: mockValidationErrors },
-      });
-
       await interactWithChatGPT(
         mockRequest as Request,
         mockResponse as Response
@@ -106,10 +90,6 @@ describe("Chat Controller", () => {
         message: "Dados de entrada inválidos",
         errors: mockValidationErrors,
       });
-
-      (
-        global.validateInput as jest.MockedFunction<typeof validateInput>
-      ).mockRestore();
     });
 
     it("should return 404 if customer is not found", async () => {
